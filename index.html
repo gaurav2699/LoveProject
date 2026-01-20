@@ -55,6 +55,49 @@
 audio::-webkit-media-controls-panel {
 	background: linear-gradient(135deg, #ff69b4, #ff1493);
 }
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+	#musicPlayer {
+		bottom: 10px;
+		right: 10px;
+		left: 10px;
+		padding: 15px;
+		width: auto;
+		max-width: calc(100% - 20px);
+	}
+	
+	#musicPlayer audio {
+		width: 100%;
+		max-width: 100%;
+	}
+	
+	#musicPlayer .music-label {
+		font-size: 13px;
+		margin-bottom: 8px;
+	}
+	
+	#musicPlayer .song-title {
+		font-size: 11px;
+	}
+}
+
+@media (max-width: 480px) {
+	#musicPlayer {
+		bottom: 5px;
+		right: 5px;
+		left: 5px;
+		padding: 12px;
+	}
+	
+	#musicPlayer .music-label {
+		font-size: 12px;
+	}
+	
+	#musicPlayer .song-title {
+		font-size: 10px;
+	}
+}
 </style>
 <link href="css/default.css" type="text/css" rel="stylesheet">
 <script type="text/javascript" src="js/jquery.js"></script>

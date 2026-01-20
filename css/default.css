@@ -19,3 +19,56 @@
 #copyright a{color:#666}
 #icon{font-size: 48px;color: red;margin: 50 px; align-content: center;}
 #heartspan{align-content: center;text-align: center;margin: 20px;}
+
+/* Responsive styles for tablets and smaller screens */
+@media (max-width: 1024px) {
+	#content{display:flex;flex-direction:column;align-items:center;padding:20px}
+	#code{float:none;width:90%;max-width:500px;height:auto;font-size:14px;margin-bottom:30px}
+	#loveHeart{float:none;width:90%;max-width:600px;height:auto;min-height:500px}
+	#garden{min-height:400px}
+	#words{width:90%;max-width:450px;font-size:22px}
+	#messages{font-size:26px}
+	#loveu{margin-top:50px;margin-right:0;text-align:center;font-size:20px}
+}
+
+/* Responsive styles for mobile phones */
+@media (max-width: 768px) {
+	body{font-size:14px}
+	#content{padding:15px 10px;padding-bottom:100px}
+	#code{width:95%;font-size:13px;line-height:1.6}
+	#loveHeart{width:95%;min-height:400px}
+	#garden{min-height:350px}
+	#words{width:95%;font-size:20px;padding:0 10px}
+	#messages{font-size:22px}
+	#elapseClock{font-size:16px}
+	#elapseClock .digit{font-size:32px}
+	#loveu{font-size:18px;margin-top:40px}
+	#loveu .signature{font-size:16px}
+	#icon{font-size:40px}
+	#heartspan{margin:15px}
+}
+
+/* Responsive styles for small phones */
+@media (max-width: 480px) {
+	body{font-size:13px}
+	#content{padding:10px 5px;padding-bottom:120px}
+	#code{width:98%;font-size:11px;line-height:1.5;padding:10px}
+	#loveHeart{width:98%;min-height:350px}
+	#garden{min-height:300px}
+	#words{width:98%;font-size:18px;padding:0 5px}
+	#messages{font-size:20px;line-height:1.4}
+	#elapseClock{font-size:14px;margin-top:8px;margin-bottom:8px}
+	#elapseClock .digit{font-size:28px}
+	#loveu{font-size:16px;margin-top:30px;padding:10px}
+	#loveu .signature{font-size:14px;margin-top:8px}
+	#icon{font-size:36px}
+	#heartspan{margin:10px}
+	#copyright{font-size:11px;margin-top:15px}
+}
+
+/* Landscape orientation adjustments for mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+	#loveHeart{min-height:300px}
+	#garden{min-height:250px}
+	#loveu{margin-top:20px}
+}
