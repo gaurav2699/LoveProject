@@ -3,12 +3,57 @@
 <head>
 <script src="https://kit.fontawesome.com/a14ae32021.js" crossorigin="anonymous"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>This one is for my Varchhu</title>
+<title>This one is for my Puchiya</title>
 
 <style type="text/css">
 @font-face {
 	font-family: digit;
 	src: url('digital-7_mono.ttf') format("truetype");
+}
+
+#musicPlayer {
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	background: rgba(255, 105, 180, 0.9);
+	padding: 20px;
+	border-radius: 15px;
+	box-shadow: 0 8px 32px rgba(255, 20, 147, 0.4);
+	backdrop-filter: blur(10px);
+	border: 2px solid rgba(255, 255, 255, 0.3);
+	z-index: 1000;
+	transition: all 0.3s ease;
+}
+
+#musicPlayer:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 12px 40px rgba(255, 20, 147, 0.6);
+}
+
+#musicPlayer audio {
+	width: 250px;
+	outline: none;
+}
+
+#musicPlayer .music-label {
+	color: white;
+	font-size: 14px;
+	margin-bottom: 10px;
+	text-align: center;
+	font-weight: bold;
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+#musicPlayer .song-title {
+	color: #ffe0f0;
+	font-size: 12px;
+	text-align: center;
+	margin-top: 5px;
+	font-style: italic;
+}
+
+audio::-webkit-media-controls-panel {
+	background: linear-gradient(135deg, #ff69b4, #ff1493);
 }
 </style>
 <link href="css/default.css" type="text/css" rel="stylesheet">
@@ -20,21 +65,29 @@
 
 <body>
 
+<div id="musicPlayer">
+	<div class="music-label">🎵 Play this 🎵</div>
+	<audio controls loop id="bgMusic">
+		<source src="every-breath-you-take.mp3" type="audio/mpeg">
+		Your browser does not support the audio element.
+	</audio>
+</div>
+
 <div id="mainDiv">
 	<div id="content">
 		<div id="code">
 			<span class="comments">/**</span><br />
 			<span class="space"/><span class="comments">*THE CODE OF LOVE</span><br />
 			<span class="space"/><span class="comments">*/</span><br />
-			Hey Girl !<br />
+			Hey Puchi !<br />
 			Do you remember the day we first met?<br />
-			<span class="comments">// The ET-LAB Friday. </span><br />
+			<span class="comments">// BBA </span><br />
 			Since that day a spark begun;<br />
-			<span class="comments">// Your face Your Voice Your Words.</span><br />
+			<span class="comments">// Your face Your Smile Your Words.</span><br />
 			Your everything got imprinted in my heart;<br />
 			As the time went on;<br />
 			The Bond grew stronger and stronger;<br />
-			Journey from Infatuation to Love;<br />
+			Journey of Love;<br />
 			We have traveled a long way together;<br />
 			There have been fights ;<br />
 			<span class="comments">// And I'm sure there will be more.</span><br />
@@ -42,25 +95,25 @@
 			<br>
 			<br>
 			All I want to say is:<br />
-			Baby, I will love you forever;<br />
+			My Puchiya, I will love you forever;<br />
 			<br>
 			<br>
 			Now If you want to hug me you can touch the heart below<br />
 			<br>
 			<span id="heartspan">
-			<a href="image.jpg"><i class="fas fa-heart" id="icon"></i></a>
+			<a href="image.jpeg"><i class="fas fa-heart" id="icon"></i></a>
 			</span>
 		</div>
 		<div id="loveHeart">
 			<canvas id="garden"></canvas>
 			<div id="words">
 				<div id="messages">
-					वर्षा ऋतु FOREVER
+					Hani Gaurav FOREVER
 					<div id="elapseClock"></div>
 				</div>
 				<div id="loveu">
 					I LOVE YOU SO MUCH<br/>
-					<div class="signature">- RITVIK</div>
+					<div class="signature">- Gaurav</div>
 				</div>
 			</div>
 		</div>
@@ -71,7 +124,7 @@
 var offsetX = $("#loveHeart").width() / 2;
 var offsetY = $("#loveHeart").height() / 2 - 55;
 var together = new Date();
-together.setFullYear(2016, 8, 5);
+together.setFullYear(2022, 14, 4);
 together.setHours(16);
 together.setMinutes(30);
 together.setSeconds(0);
