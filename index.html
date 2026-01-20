@@ -3,6 +3,7 @@
 <head>
 <script src="https://kit.fontawesome.com/a14ae32021.js" crossorigin="anonymous"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>This one is for my Puchiya</title>
 
 <style type="text/css">
@@ -164,14 +165,39 @@ audio::-webkit-media-controls-panel {
 </div>
 
 <script type="text/javascript">
-var offsetX = $("#loveHeart").width() / 2;
-var offsetY = $("#loveHeart").height() / 2 - 55;
+function getResponsiveOffsets() {
+	var width = $("#loveHeart").width();
+	var height = $("#loveHeart").height();
+	var offsetX = width / 2;
+	var offsetY = height / 2 - 55;
+	
+	// Adjust offsets for mobile devices with smaller canvas
+	if (window.innerWidth <= 480) {
+		offsetY = height / 2 - 15;
+	} else if (window.innerWidth <= 768) {
+		offsetY = height / 2 - 20;
+	}
+	
+	return { x: offsetX, y: offsetY };
+}
+
+var offsets = getResponsiveOffsets();
+var offsetX = offsets.x;
+var offsetY = offsets.y;
+
 var together = new Date();
 together.setFullYear(2022, 14, 4);
 together.setHours(16);
 together.setMinutes(30);
 together.setSeconds(0);
 together.setMilliseconds(0);
+
+// Update offsets on window resize
+window.addEventListener('resize', function() {
+	var newOffsets = getResponsiveOffsets();
+	offsetX = newOffsets.x;
+	offsetY = newOffsets.y;
+});
 
 if (!document.createElement('canvas').getContext) {
 	var msg = document.createElement("div");
