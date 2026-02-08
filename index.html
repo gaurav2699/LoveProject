@@ -99,6 +99,226 @@ audio::-webkit-media-controls-panel {
 		font-size: 10px;
 	}
 }
+/* Valentine's Day Modal Styles */
+#valentineModal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.8);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 9999;
+	animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}
+
+@keyframes heartBeat {
+	0%, 100% { transform: scale(1); }
+	10%, 30% { transform: scale(0.9); }
+	20%, 40% { transform: scale(1.1); }
+}
+
+#valentineBox {
+	background: linear-gradient(135deg, #ff6b9d 0%, #ffc3d4 100%);
+	padding: 40px;
+	border-radius: 30px;
+	text-align: center;
+	box-shadow: 0 20px 60px rgba(255, 20, 147, 0.5);
+	max-width: 500px;
+	width: 90%;
+	border: 3px solid #fff;
+	animation: slideDown 0.6s ease;
+}
+
+@keyframes slideDown {
+	from {
+		opacity: 0;
+		transform: translateY(-50px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+#valentineBox .heart-icon {
+	font-size: 80px;
+	color: #ff1493;
+	margin-bottom: 20px;
+	animation: heartBeat 1.5s infinite;
+	display: inline-block;
+}
+
+#valentineBox h1 {
+	color: #fff;
+	font-size: 32px;
+	margin: 20px 0;
+	font-weight: bold;
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+#valentineBox p {
+	color: #fff;
+	font-size: 18px;
+	margin: 15px 0 30px;
+	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.valentine-buttons {
+	margin-top: 30px;
+	display: flex;
+	justify-content: center;
+	gap: 20px;
+	flex-wrap: wrap;
+}
+
+#yesBtn, #noBtn {
+	padding: 15px 40px;
+	font-size: 20px;
+	border: none;
+	border-radius: 50px;
+	cursor: pointer;
+	font-weight: bold;
+	transition: all 0.3s ease;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+#yesBtn {
+	background: linear-gradient(135deg, #4CAF50, #45a049);
+	color: white;
+}
+
+#yesBtn:hover {
+	transform: scale(1.1);
+	box-shadow: 0 8px 25px rgba(76, 175, 80, 0.5);
+}
+
+#noBtn {
+	background: linear-gradient(135deg, #f44336, #da190b);
+	color: white;
+	position: relative;
+}
+
+#acceptMessage {
+	display: none;
+	animation: fadeIn 0.8s ease;
+}
+
+#acceptMessage .celebration {
+	font-size: 100px;
+	margin-bottom: 20px;
+}
+
+#acceptMessage h2 {
+	color: #fff;
+	font-size: 36px;
+	margin-bottom: 20px;
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+#acceptMessage p {
+	font-size: 20px;
+	line-height: 1.6;
+}
+
+#continueBtn {
+	margin-top: 30px;
+	padding: 15px 50px;
+	font-size: 18px;
+	border: none;
+	border-radius: 50px;
+	background: linear-gradient(135deg, #ff6b9d, #c94b77);
+	color: white;
+	cursor: pointer;
+	font-weight: bold;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+	transition: all 0.3s ease;
+}
+
+#continueBtn:hover {
+	transform: scale(1.05);
+	box-shadow: 0 8px 25px rgba(255, 107, 157, 0.5);
+}
+
+/* Mobile responsive styles for Valentine modal */
+@media (max-width: 768px) {
+	#valentineBox {
+		padding: 30px 20px;
+		width: 85%;
+	}
+	
+	#valentineBox .heart-icon {
+		font-size: 60px;
+	}
+	
+	#valentineBox h1 {
+		font-size: 26px;
+	}
+	
+	#valentineBox p {
+		font-size: 16px;
+	}
+	
+	#yesBtn, #noBtn {
+		padding: 12px 30px;
+		font-size: 18px;
+	}
+	
+	#acceptMessage h2 {
+		font-size: 28px;
+	}
+	
+	#acceptMessage p {
+		font-size: 16px;
+	}
+}
+
+@media (max-width: 480px) {
+	#valentineBox {
+		padding: 25px 15px;
+	}
+	
+	#valentineBox .heart-icon {
+		font-size: 50px;
+	}
+	
+	#valentineBox h1 {
+		font-size: 22px;
+	}
+	
+	#valentineBox p {
+		font-size: 14px;
+	}
+	
+	#yesBtn, #noBtn {
+		padding: 10px 25px;
+		font-size: 16px;
+	}
+	
+	#acceptMessage .celebration {
+		font-size: 70px;
+	}
+	
+	#acceptMessage h2 {
+		font-size: 24px;
+	}
+	
+	#acceptMessage p {
+		font-size: 14px;
+	}
+	
+	#continueBtn {
+		padding: 12px 35px;
+		font-size: 16px;
+	}
+}
 </style>
 <link href="css/default.css" type="text/css" rel="stylesheet">
 <script type="text/javascript" src="js/jquery.js"></script>
@@ -108,6 +328,30 @@ audio::-webkit-media-controls-panel {
 </head>
 
 <body>
+
+<!-- Valentine's Day Modal -->
+<div id="valentineModal">
+	<div id="valentineBox">
+		<div id="questionSection">
+			<div class="heart-icon">💖</div>
+			<h1>Hey Puchiya!</h1>
+			<p>I have a very important question for you...</p>
+			<h1 style="font-size: 28px; margin-top: 20px;">Will you be my Valentine? 💝</h1>
+			<div class="valentine-buttons">
+				<button id="yesBtn">Yes! 💕</button>
+				<button id="noBtn">No</button>
+			</div>
+		</div>
+		<div id="acceptMessage">
+			<div class="celebration">🎉💖🎊</div>
+			<h2>Yayyy! You said YES!</h2>
+			<p>You've made me the happiest person in the world! 💕<br><br>
+			I promise to make this Valentine's Day and every day special for you, my Puchiya!<br><br>
+			I love you so much! ❤️</p>
+			<button id="continueBtn">Continue to your surprise 💝</button>
+		</div>
+	</div>
+</div>
 
 <div id="musicPlayer">
 	<div class="music-label">🎵 Play this 🎵</div>
@@ -219,6 +463,63 @@ if (!document.createElement('canvas').getContext) {
 	adjustCodePosition();
 	$("#code").typewriter();
 }
+</script>
+
+<script type="text/javascript">
+// Valentine's Day Modal Functionality
+var noClickCount = 0;
+
+$(document).ready(function() {
+	// No button hover effect - button moves away
+	$('#noBtn').mouseenter(function() {
+		var btn = $(this);
+		var box = $('#valentineBox');
+		var modalWidth = box.width();
+		var modalHeight = box.height();
+		
+		// Get button dimensions
+		var btnWidth = btn.outerWidth();
+		var btnHeight = btn.outerHeight();
+		
+		// Calculate safe random position
+		var maxX = modalWidth - btnWidth - 80;
+		var maxY = modalHeight - btnHeight - 80;
+		var randomX = Math.floor(Math.random() * Math.max(maxX, 50)) + 40;
+		var randomY = Math.floor(Math.random() * Math.max(maxY, 50)) + 40;
+		
+		btn.css({
+			'position': 'absolute',
+			'left': randomX + 'px',
+			'top': randomY + 'px'
+		});
+		
+		noClickCount++;
+		
+		// Change button text based on attempts
+		var noTexts = ['No', 'Are you sure?', 'Really?', 'Think again!', 'Please? 🥺', 'Just try Yes!'];
+		if (noClickCount < noTexts.length) {
+			btn.text(noTexts[noClickCount]);
+		}
+	});
+	
+	// For mobile - also handle touch
+	$('#noBtn').bind('touchstart', function(e) {
+		e.preventDefault();
+		$(this).trigger('mouseenter');
+	});
+	
+	// Yes button click
+	$('#yesBtn').click(function() {
+		$('#questionSection').fadeOut(500, function() {
+			$('#acceptMessage').fadeIn(500);
+		});
+	});
+	
+	// Continue button - close modal and start the main experience
+	$('#continueBtn').click(function() {
+		$('#valentineModal').fadeOut(1000);
+	});
+});
 </script>
 </body>
 </html>
