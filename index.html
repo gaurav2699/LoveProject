@@ -321,6 +321,7 @@ audio::-webkit-media-controls-panel {
 }
 </style>
 <link href="css/default.css" type="text/css" rel="stylesheet">
+<link href="css/apology-game.css" type="text/css" rel="stylesheet">
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/garden.js"></script>
 <script type="text/javascript" src="js/functions.js"></script>
@@ -521,5 +522,83 @@ $(document).ready(function() {
 	});
 });
 </script>
+
+<!-- ===================== Apology Game ===================== -->
+<!-- Floating button that opens the apology mini-game.        -->
+<button id="apology-game-trigger" type="button" aria-label="Open apology game">
+	🎮 A Little Game for You 💖
+</button>
+
+<!-- Game overlay: hidden by default; activated by JS adding   -->
+<!-- the .ag-open class in css/apology-game.css.               -->
+<div id="apology-game-overlay" role="dialog" aria-modal="true" aria-label="Apology Game">
+
+	<!-- HUD: title, level badge, score, and close button. -->
+	<div class="ag-hud">
+		<div class="ag-hud-left">
+			<span class="ag-title">Catch My Sorry, Puchi 💝</span>
+			<span class="ag-level-badge" id="apology-level">Level 1 · I’m Sorry</span>
+		</div>
+		<div class="ag-hud-right">
+			<span class="ag-score" id="apology-score">0 / 240</span>
+			<button id="apology-close-btn" type="button" aria-label="Close game">✕</button>
+		</div>
+	</div>
+
+	<!-- Apology meter (progress bar). -->
+	<div class="ag-meter-wrap">
+		<div class="ag-meter-label">APOLOGY METER</div>
+		<div class="ag-meter"><div class="ag-meter-fill" id="apology-meter-fill"></div></div>
+	</div>
+
+	<!-- Game canvas (drawn each frame by apology-game.js). -->
+	<canvas id="apology-game-canvas"></canvas>
+
+	<!-- Floating banner that flashes apology messages on catch. -->
+	<div class="ag-message-banner" id="apology-message-banner"></div>
+
+	<!-- Pre-game intro card. -->
+	<div class="ag-intro" id="apology-intro">
+		<h2>Hey Puchiya 💖</h2>
+		<p>I made you a little game as my way of saying <em>sorry</em>.</p>
+		<p>Move the basket and catch the falling hearts, roses,
+		   chocolates and diamonds. Avoid the rainy clouds —
+		   they’re my bad days. Fill the apology meter to unlock
+		   a special note from me.</p>
+		<p class="ag-controls-hint">🖱️ Move with mouse · 📱 swipe on touch · ⌨️ ← / → keys</p>
+		<button class="ag-btn" id="apology-start-btn" type="button">Start the Apology 💕</button>
+	</div>
+
+	<!-- Finale card shown when the meter is filled. -->
+	<div class="ag-finale" id="apology-finale" style="display:none;">
+		<span class="ag-crown">👑💖</span>
+		<h2>You Caught My Whole Heart 💞</h2>
+		<div class="ag-letter">
+			My dearest Puchiya,<br/><br/>
+
+			I’m sorry — for every word that landed wrong, every silence
+			that stretched too long, every moment I made you feel anything
+			less than treasured. You deserve a love that listens, that
+			learns, and that keeps choosing you on the messy days too.<br/><br/>
+
+			I promise to be more patient, more present, and to be the
+			version of me that you fell for in the first place. You are
+			my favourite story, my best memory, and my forever plan.<br/><br/>
+
+			Thank you for catching all of these little hearts — every
+			single one of them was a piece of mine.<br/>
+
+			<span class="ag-sign">— Yours, always · Gaurav 💍</span>
+		</div>
+		<div class="ag-finale-actions">
+			<button class="ag-btn" id="apology-finale-close" type="button">Close 💖</button>
+			<button class="ag-btn ag-btn-secondary" id="apology-finale-replay" type="button">Play Again 🔁</button>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src="js/apology-game.js"></script>
+<!-- =================== End Apology Game ==================== -->
+
 </body>
 </html>
