@@ -107,6 +107,12 @@
 		if (!overlay || !canvas) return;
 		ctx = canvas.getContext('2d');
 
+		// Layer that holds DOM-based falling items and sparkles.
+		// Created lazily once we know the overlay exists.
+		state.fallLayer = document.createElement('div');
+		state.fallLayer.className = 'ag-fall-layer';
+		overlay.appendChild(state.fallLayer);
+
 		document.getElementById('apology-game-trigger').addEventListener('click', openOverlay);
 		document.getElementById('apology-close-btn').addEventListener('click', closeOverlay);
 		document.getElementById('apology-start-btn').addEventListener('click', startGame);
@@ -144,7 +150,18 @@
 	function closeOverlay() {
 		state.running = false;
 		overlay.classList.remove('ag-open');
+		clearAllItems();
+	}
+
+	function clearAllItems() {
+		for (const it of state.items) {
+			if (it.el) it.el.remove();
+		}
 		state.items.length = 0;
+		if (state.basketHeartEl) {
+			state.basketHeartEl.remove();
+			state.basketHeartEl = null;
+		}
 	}
 
 	function showIntro() {
@@ -169,7 +186,7 @@
 	function resetState() {
 		state.score = 0;
 		state.levelIndex = 0;
-		state.items.length = 0;
+		clearAllItems();
 		state.basketX = state.w / 2;
 		state.basketTargetX = state.w / 2;
 		updateHud();
@@ -278,15 +295,25 @@
 	// ---------------------------------------------------------
 	function spawnItem(level) {
 		const type = pickWeighted(ITEM_TYPES);
+		const size = type.isBad ? 36 : (28 + Math.random() * 14);
+
+		// DOM-based item — guaranteed emoji rendering on iOS Safari.
+		const el = document.createElement('span');
+		el.className = 'ag-fall-item' + (type.isBad ? ' ag-bad' : '');
+		el.textContent = type.glyph;
+		el.style.fontSize = size + 'px';
+		state.fallLayer.appendChild(el);
+
 		state.items.push({
-			x: 40 + Math.random() * (state.w - 80),
+			x: 40 + Math.random() * Math.max(80, state.w - 80),
 			y: -30,
 			vy: level.fallSpeed * (0.85 + Math.random() * 0.4),
 			vx: (Math.random() - 0.5) * 0.6,
 			rot: Math.random() * Math.PI * 2,
 			vrot: (Math.random() - 0.5) * 0.04,
-			size: type.isBad ? 36 : (28 + Math.random() * 14),
-			type: type
+			size: size,
+			type: type,
+			el: el
 		});
 	}
 
@@ -300,9 +327,15 @@
 			it.x += it.vx * dt * 0.16;
 			it.rot += it.vrot;
 
+			// Position the DOM element (centered on it.x, it.y).
+			it.el.style.transform =
+				'translate3d(' + (it.x - it.size / 2) + 'px,' +
+				(it.y - it.size / 2) + 'px, 0) rotate(' + it.rot + 'rad)';
+
 			// Catch detection
 			if (it.y > basketY - 18 && it.y < basketY + 14 &&
 				Math.abs(it.x - state.basketX) < basketHalfWidth) {
+				if (it.el) it.el.remove();
 				state.items.splice(i, 1);
 				onCatch(it.type);
 				continue;
@@ -310,6 +343,7 @@
 
 			// Off-screen
 			if (it.y > state.h + 40) {
+				if (it.el) it.el.remove();
 				state.items.splice(i, 1);
 			}
 		}
@@ -332,7 +366,7 @@
 	function render() {
 		ctx.clearRect(0, 0, state.w, state.h);
 
-		// Faint gradient haze
+		// Faint gradient haze around the basket — pure shapes, works on iOS.
 		const grad = ctx.createRadialGradient(
 			state.basketX, state.h - 80, 20,
 			state.basketX, state.h - 80, 280
@@ -342,24 +376,10 @@
 		ctx.fillStyle = grad;
 		ctx.fillRect(0, 0, state.w, state.h);
 
-		// Items
-		ctx.textAlign = 'center';
-		ctx.textBaseline = 'middle';
-		for (const it of state.items) {
-			ctx.save();
-			ctx.translate(it.x, it.y);
-			ctx.rotate(it.rot);
-			ctx.font = it.size + 'px ' + EMOJI_FONT;
-			ctx.shadowColor = it.type.isBad ? 'rgba(120, 120, 200, 0.55)' : 'rgba(255, 105, 180, 0.6)';
-			ctx.shadowBlur = 14;
-			ctx.fillText(it.type.glyph, 0, 0);
-			ctx.restore();
-		}
-
-		// Sparkles
-		drawSparkles();
-
-		// Basket
+		// Falling items + sparkles are rendered as DOM elements
+		// (see updateItems / burstSparkles). Only the basket is
+		// drawn on canvas — it is composed of plain shapes which
+		// every browser, including iOS Safari, handles reliably.
 		drawBasket();
 	}
 
@@ -401,45 +421,43 @@
 		ctx.lineTo(58, -16);
 		ctx.stroke();
 
-		// Heart on the rim
-		ctx.font = '26px ' + EMOJI_FONT;
-		ctx.textAlign = 'center';
-		ctx.textBaseline = 'middle';
-		ctx.fillText('💗', 0, -32);
-
 		ctx.restore();
+
+		// The little 💗 above the basket is rendered as a DOM
+		// element (positioned in updateBasketHeart) so it renders
+		// reliably on iOS Safari.
+		updateBasketHeart(x, y - 32);
+	}
+
+	function updateBasketHeart(x, y) {
+		if (!state.basketHeartEl) {
+			const h = document.createElement('span');
+			h.className = 'ag-fall-item';
+			h.textContent = '💗';
+			h.style.fontSize = '26px';
+			h.style.zIndex = 6;
+			state.fallLayer.appendChild(h);
+			state.basketHeartEl = h;
+		}
+		state.basketHeartEl.style.transform =
+			'translate3d(' + (x - 13) + 'px,' + (y - 13) + 'px, 0)';
 	}
 
 	// ---------------------------------------------------------
-	// Sparkles (small particle effect when catching)
+	// Sparkles — DOM-based so emoji renders on every device,
+	// animated entirely via CSS (see .ag-sparkle in the CSS).
 	// ---------------------------------------------------------
-	const sparkles = [];
 	function burstSparkles(x, y, glyph) {
 		for (let i = 0; i < 8; i++) {
-			sparkles.push({
-				x, y,
-				vx: (Math.random() - 0.5) * 4,
-				vy: -2 - Math.random() * 3,
-				life: 1,
-				glyph: Math.random() < 0.5 ? '✨' : glyph
-			});
-		}
-	}
-	function drawSparkles() {
-		for (let i = sparkles.length - 1; i >= 0; i--) {
-			const s = sparkles[i];
-			s.x += s.vx;
-			s.y += s.vy;
-			s.vy += 0.18;
-			s.life -= 0.025;
-			if (s.life <= 0) { sparkles.splice(i, 1); continue; }
-			ctx.save();
-			ctx.globalAlpha = Math.max(0, s.life);
-			ctx.font = '20px ' + EMOJI_FONT;
-			ctx.textAlign = 'center';
-			ctx.textBaseline = 'middle';
-			ctx.fillText(s.glyph, s.x, s.y);
-			ctx.restore();
+			const el = document.createElement('span');
+			el.className = 'ag-sparkle';
+			el.textContent = Math.random() < 0.5 ? '✨' : glyph;
+			el.style.transform = 'translate3d(' + x + 'px,' + y + 'px, 0)';
+			// Set CSS variables consumed by the keyframes.
+			el.style.setProperty('--ag-dx', ((Math.random() - 0.5) * 160) + 'px');
+			el.style.setProperty('--ag-dy', (-60 - Math.random() * 90) + 'px');
+			state.fallLayer.appendChild(el);
+			setTimeout(function () { el.remove(); }, 900);
 		}
 	}
 

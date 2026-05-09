@@ -201,6 +201,55 @@
 	height: 100%;
 	display: block;
 	cursor: none;
+	z-index: 1;
+}
+
+/* Layer that holds DOM-based falling items and sparkles. We render
+   these as HTML rather than canvas text because iOS Safari can fail
+   to draw emoji glyphs through ctx.fillText even with an explicit
+   emoji font stack. HTML elements always render emoji correctly. */
+.ag-fall-layer {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	z-index: 5;
+	overflow: hidden;
+}
+
+.ag-fall-item {
+	position: absolute;
+	left: 0;
+	top: 0;
+	pointer-events: none;
+	user-select: none;
+	-webkit-user-select: none;
+	will-change: transform;
+	text-align: center;
+	line-height: 1;
+	font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Twemoji Mozilla", serif;
+	filter: drop-shadow(0 0 8px rgba(255, 105, 180, 0.55));
+}
+
+.ag-fall-item.ag-bad {
+	filter: drop-shadow(0 0 8px rgba(120, 120, 200, 0.55));
+}
+
+.ag-sparkle {
+	position: absolute;
+	left: 0;
+	top: 0;
+	font-size: 20px;
+	pointer-events: none;
+	user-select: none;
+	-webkit-user-select: none;
+	will-change: transform, opacity;
+	font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Twemoji Mozilla", serif;
+	animation: ag-sparkle-fly 0.85s ease-out forwards;
+}
+
+@keyframes ag-sparkle-fly {
+	from { transform: translate3d(0, 0, 0) scale(1); opacity: 1; }
+	to   { transform: translate3d(var(--ag-dx, 0), var(--ag-dy, -80px), 0) scale(0.4); opacity: 0; }
 }
 
 /* Floating apology message banner */
