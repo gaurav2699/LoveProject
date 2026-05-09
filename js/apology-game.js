@@ -47,6 +47,11 @@
 		"Hani Gaurav — forever and ever 💍"
 	];
 
+	// Emoji-aware font stack. iOS Safari does not always fall back
+	// to the system color-emoji font when the canvas font is just
+	// "serif", so we name the platform emoji families explicitly.
+	const EMOJI_FONT = '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Twemoji Mozilla", serif';
+
 	// ---- Item type catalogue ----
 	const ITEM_TYPES = [
 		{ glyph: '💖', points: 5,  weight: 50, isBad: false },
@@ -128,7 +133,11 @@
 	// ---------------------------------------------------------
 	function openOverlay() {
 		overlay.classList.add('ag-open');
-		resizeCanvas();
+		// iOS Safari sometimes hasn't computed the overlay's layout
+		// yet when we toggle display. Defer the canvas size to the
+		// next frame and re-check shortly after to be safe.
+		requestAnimationFrame(resizeCanvas);
+		setTimeout(resizeCanvas, 120);
 		showIntro();
 	}
 
@@ -146,6 +155,9 @@
 
 	function startGame() {
 		introEl.style.display = 'none';
+		// Re-measure right before the loop starts in case the
+		// overlay was 0×0 when first opened (iOS Safari quirk).
+		resizeCanvas();
 		resetState();
 		state.running = true;
 		state.lastFrame = performance.now();
@@ -168,8 +180,13 @@
 	// ---------------------------------------------------------
 	function resizeCanvas() {
 		const dpr = window.devicePixelRatio || 1;
-		const w = overlay.clientWidth;
-		const h = overlay.clientHeight;
+		// Fall back to the viewport if the overlay hasn't been laid
+		// out yet (happens on iOS Safari right after toggling
+		// display: block). A zero-sized canvas would mean items
+		// spawn off-screen and nothing appears to fall.
+		let w = overlay.clientWidth  || window.innerWidth  || document.documentElement.clientWidth;
+		let h = overlay.clientHeight || window.innerHeight || document.documentElement.clientHeight;
+		if (w < 50 || h < 50) { w = window.innerWidth; h = window.innerHeight; }
 		canvas.width  = w * dpr;
 		canvas.height = h * dpr;
 		canvas.style.width  = w + 'px';
@@ -332,7 +349,7 @@
 			ctx.save();
 			ctx.translate(it.x, it.y);
 			ctx.rotate(it.rot);
-			ctx.font = it.size + 'px serif';
+			ctx.font = it.size + 'px ' + EMOJI_FONT;
 			ctx.shadowColor = it.type.isBad ? 'rgba(120, 120, 200, 0.55)' : 'rgba(255, 105, 180, 0.6)';
 			ctx.shadowBlur = 14;
 			ctx.fillText(it.type.glyph, 0, 0);
@@ -385,7 +402,7 @@
 		ctx.stroke();
 
 		// Heart on the rim
-		ctx.font = '26px serif';
+		ctx.font = '26px ' + EMOJI_FONT;
 		ctx.textAlign = 'center';
 		ctx.textBaseline = 'middle';
 		ctx.fillText('💗', 0, -32);
@@ -418,7 +435,7 @@
 			if (s.life <= 0) { sparkles.splice(i, 1); continue; }
 			ctx.save();
 			ctx.globalAlpha = Math.max(0, s.life);
-			ctx.font = '20px serif';
+			ctx.font = '20px ' + EMOJI_FONT;
 			ctx.textAlign = 'center';
 			ctx.textBaseline = 'middle';
 			ctx.fillText(s.glyph, s.x, s.y);
